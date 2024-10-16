@@ -2,9 +2,10 @@ local wezterm = require 'wezterm'
 local act = wezterm.action
 
 return {
+  leader = { key = 'b', mods = 'CTRL', timeout = 1000 },
   keys = {
     ---- My custom keys ----
-    -- Pane movement
+    -- Panes
     { key = 'h', mods = 'SHIFT|CTRL', action = act.ActivatePaneDirection 'Left' },
     { key = 'LeftArrow', mods = 'SHIFT|ALT|CTRL', action = act.AdjustPaneSize { 'Left', 1 } },
     { key = 'l', mods = 'SHIFT|CTRL', action = act.ActivatePaneDirection 'Right' },
@@ -14,12 +15,42 @@ return {
     { key = 'j', mods = 'SHIFT|CTRL', action = act.ActivatePaneDirection 'Down' },
     { key = 'DownArrow', mods = 'SHIFT|ALT|CTRL', action = act.AdjustPaneSize { 'Down', 1 } },
 
-    -- Tab movement
+    -- Tabs
     { key = '{', mods = 'SHIFT|CTRL', action = act.ActivateTabRelative(-1) },
     { key = '}', mods = 'SHIFT|CTRL', action = act.ActivateTabRelative(1) },
+    -- Rename current tab
+    {
+      key = 't',
+      mods = 'LEADER',
+      action = act.PromptInputLine {
+        description = 'Enter name for tab',
+        action = wezterm.action_callback(function(window, pane, line)
+          -- line will be nil if <ESC>
+          -- line will be empty string if <CR>
+          -- Otherwise will contain text
+          if line then
+            window:active_tab():set_title(line)
+          end
+        end),
+      },
+    },
 
     -- Workspace
     { key = 'M', mods = 'SHIFT|CTRL', action = act.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' } },
+    {
+      key = 'N',
+      mods = 'SHIFT|CTRL',
+      action = act.PromptInputLine {
+        description = 'Enter name for new Workspace',
+        action = wezterm.action_callback(function(window, pane, line)
+          -- Bail if <ESC> is hit
+          -- If empty, will generate random name
+          if line ~= nil then
+            window:perform_action(act.SwitchToWorkspace { name = line }, pane)
+          end
+        end),
+      },
+    },
     -- { key = '}', mods = 'SHIFT|CTRL', action = act.ActivateTabRelative(1) },
 
     -- Debug menu
