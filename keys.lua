@@ -36,7 +36,7 @@ return {
     },
 
     -- Workspace
-    { key = 'M', mods = 'SHIFT|CTRL', action = act.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' } },
+    { key = 'M', mods = 'SHIFT|CTRL', action = act.ShowLauncherArgs { flags = 'WORKSPACES' } },
     {
       key = 'N',
       mods = 'SHIFT|CTRL',
