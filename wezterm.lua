@@ -59,9 +59,10 @@ end)
 local keymaps = require 'keys'
 
 return {
-  font = wezterm.font {
-    family = 'Fira Code',
-    harfbuzz_features = { 'ss03' },
+  font = wezterm.font_with_fallback {
+    { family = 'Fira Code', harfbuzz_features = { 'ss03' } },
+    { family = 'Noto Sans Mono CJK JP' },
+    { family = 'YuGothic' },
   },
   color_scheme = 'Catppuccin Mocha',
   window_background_opacity = 0.85,

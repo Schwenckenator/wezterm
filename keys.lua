@@ -2,7 +2,7 @@ local wezterm = require 'wezterm'
 local act = wezterm.action
 
 return {
-  leader = { key = 'b', mods = 'CTRL', timeout = 1000 },
+  leader = { key = 'Space', mods = 'ALT', timeout = 1000 },
   keys = {
     ---- My custom keys ----
     -- Panes
@@ -46,7 +46,15 @@ return {
           -- Bail if <ESC> is hit
           -- If empty, will generate random name
           if line ~= nil then
-            window:perform_action(act.SwitchToWorkspace { name = line }, pane)
+            window:perform_action(
+              act.SwitchToWorkspace {
+                name = line,
+                spawn = {
+                  cwd = '~',
+                },
+              },
+              pane
+            )
           end
         end),
       },
