@@ -3,22 +3,20 @@ local act = wezterm.action
 
 M = {}
 
--- local project_dirs = {
---   wezterm.home_dir .. '/projects',
---   wezterm.home_dir .. '/Documents/Godot',
---   wezterm.home_dir .. '/Documents/GitHub',
--- }
+local project_dirs = {
+  wezterm.home_dir .. '/projects',
+  wezterm.home_dir .. '/Documents/Godot',
+  wezterm.home_dir .. '/Documents/GitHub',
+}
 
 local function get_git_dirs()
   local projects = { wezterm.home_dir }
-  local project_dir = wezterm.home_dir .. '/projects'
-  -- for _, project_dir in ipairs(project_dirs) do
-
-  for _, dir in ipairs(wezterm.glob(project_dir .. '/*')) do
-    -- ... and add them to the projects table.
-    table.insert(projects, dir)
+  for _, project_dir in ipairs(project_dirs) do
+    for _, dir in ipairs(wezterm.glob(project_dir .. '/*')) do
+      -- ... and add them to the projects table.
+      table.insert(projects, dir)
+    end
   end
-  -- end
 
   return projects
 end
