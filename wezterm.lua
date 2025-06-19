@@ -18,6 +18,10 @@ local function tab_title(tab_info)
   -- in that tab
   local colon = string.find(tab_info.active_pane.title, ':')
 
+  if colon == nil then
+    return tab_info.active_pane.title
+  end
+
   return string.sub(tab_info.active_pane.title, colon + 2) -- .. ' '
 end
 
@@ -57,6 +61,64 @@ wezterm.on('update-status', function(window, pane)
 end)
 
 local keymaps = require 'keys'
+
+local project_dirs = {
+  wezterm.home_dir .. '/projects',
+  wezterm.home_dir .. '/Documents/Godot',
+  wezterm.home_dir .. '/Documents/GitHub',
+}
+
+local function get_git_dirs()
+  local projects = { wezterm.home_dir }
+  for _, project_dir in ipairs(project_dirs) do
+    for _, dir in ipairs(wezterm.glob(project_dir .. '/*')) do
+      -- ... and add them to the projects table.
+      table.insert(projects, dir)
+    end
+  end
+
+  return projects
+end
+
+local function choose_project()
+  local function get_choices()
+    local choices = {}
+    for _, value in ipairs(get_git_dirs()) do
+      table.insert(choices, { label = value })
+    end
+
+    return choices
+  end
+
+  return wezterm.action.InputSelector {
+    title = 'Projects',
+    choices = get_choices(),
+    fuzzy = true,
+    action = wezterm.action_callback(function(child_window, child_pane, id, label)
+      -- "label" may be empty if nothing was selected. Don't bother doing anything
+      -- when that happens.
+      if not label then
+        return
+      end
+
+      -- The SwitchToWorkspace action will switch us to a workspace if it already exists,
+      -- otherwise it will create it for us.
+      child_window:perform_action(
+        wezterm.action.SwitchToWorkspace {
+          -- We'll give our new workspace a nice name, like the last path segment
+          -- of the directory we're opening up.
+          name = label:match '([^/]+)$',
+          -- Here's the meat. We'll spawn a new terminal with the current working
+          -- directory set to the directory that was picked.
+          spawn = { cwd = label },
+        },
+        child_pane
+      )
+    end),
+  }
+end
+
+table.insert(keymaps.keys, { key = 'n', mods = 'ALT', action = choose_project() })
 
 return {
   font = wezterm.font_with_fallback {

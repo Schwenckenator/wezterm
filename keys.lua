@@ -1,8 +1,10 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
+-- local project = require 'custom.project'
 
 return {
-  leader = { key = 'Space', mods = 'ALT', timeout = 1000 },
+  -- leader = { key = 'Space', mods = 'ALT', timeout = 1000 },
+  leader = { key = 'b', mods = 'CTRL', timeout = 1000 },
   keys = {
     ---- My custom keys ----
     -- Panes
@@ -36,7 +38,17 @@ return {
     },
 
     -- Workspace
+    -- { key = 'n', mods = 'ALT', action = choose_project() },
     { key = 'M', mods = 'SHIFT|CTRL', action = act.ShowLauncherArgs { flags = 'WORKSPACES' } },
+    -- {
+    --   key = 'n',
+    --   mods = 'ALT',
+    --   action = act.SpawnCommandInNewWindow {
+    --     label = 'Fuzzy find a project!',
+    --     args = { 'top' },
+    --   },
+    -- },
+    -- { key = 'w', mods = 'ALT', action = act.ShowLauncher },
     {
       key = 'N',
       mods = 'SHIFT|CTRL',
@@ -174,10 +186,10 @@ return {
     -- { key = 'phys:Space', mods = 'SHIFT|CTRL', action = act.QuickSelect },
     -- { key = 'PageUp', mods = 'SHIFT', action = act.ScrollByPage(-1) },
     -- { key = 'PageUp', mods = 'CTRL', action = act.ActivateTabRelative(-1) },
-    -- { key = 'PageUp', mods = 'SHIFT|CTRL', action = act.MoveTabRelative(-1) },
+    { key = '<', mods = 'SHIFT|CTRL', action = act.MoveTabRelative(-1) },
     -- { key = 'PageDown', mods = 'SHIFT', action = act.ScrollByPage(1) },
     -- { key = 'PageDown', mods = 'CTRL', action = act.ActivateTabRelative(1) },
-    -- { key = 'PageDown', mods = 'SHIFT|CTRL', action = act.MoveTabRelative(1) },
+    { key = '>', mods = 'SHIFT|CTRL', action = act.MoveTabRelative(1) },
     -- { key = 'LeftArrow', mods = 'SHIFT|CTRL', action = act.ActivatePaneDirection 'Left' },
     -- { key = 'LeftArrow', mods = 'SHIFT|ALT|CTRL', action = act.AdjustPaneSize { 'Left', 1 } },
     -- { key = 'RightArrow', mods = 'SHIFT|CTRL', action = act.ActivatePaneDirection 'Right' },
@@ -259,16 +271,16 @@ return {
     },
 
     search_mode = {
-      -- { key = 'Enter', mods = 'NONE', action = act.CopyMode 'PriorMatch' },
-      -- { key = 'Escape', mods = 'NONE', action = act.CopyMode 'Close' },
-      -- { key = 'n', mods = 'CTRL', action = act.CopyMode 'NextMatch' },
-      -- { key = 'p', mods = 'CTRL', action = act.CopyMode 'PriorMatch' },
-      -- { key = 'r', mods = 'CTRL', action = act.CopyMode 'CycleMatchType' },
-      -- { key = 'u', mods = 'CTRL', action = act.CopyMode 'ClearPattern' },
-      -- { key = 'PageUp', mods = 'NONE', action = act.CopyMode 'PriorMatchPage' },
-      -- { key = 'PageDown', mods = 'NONE', action = act.CopyMode 'NextMatchPage' },
-      -- { key = 'UpArrow', mods = 'NONE', action = act.CopyMode 'PriorMatch' },
-      -- { key = 'DownArrow', mods = 'NONE', action = act.CopyMode 'NextMatch' },
+      { key = 'Enter', mods = 'NONE', action = act.CopyMode 'PriorMatch' },
+      { key = 'Escape', mods = 'NONE', action = act.CopyMode 'Close' },
+      { key = 'n', mods = 'CTRL', action = act.CopyMode 'NextMatch' },
+      { key = 'p', mods = 'CTRL', action = act.CopyMode 'PriorMatch' },
+      { key = 'r', mods = 'CTRL', action = act.CopyMode 'CycleMatchType' },
+      { key = 'u', mods = 'CTRL', action = act.CopyMode 'ClearPattern' },
+      { key = 'PageUp', mods = 'NONE', action = act.CopyMode 'PriorMatchPage' },
+      { key = 'PageDown', mods = 'NONE', action = act.CopyMode 'NextMatchPage' },
+      { key = 'UpArrow', mods = 'NONE', action = act.CopyMode 'PriorMatch' },
+      { key = 'DownArrow', mods = 'NONE', action = act.CopyMode 'NextMatch' },
     },
   },
 }
