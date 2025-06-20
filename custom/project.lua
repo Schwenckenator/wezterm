@@ -63,6 +63,8 @@ M.choose_project = function()
         },
         child_pane
       )
+      -- Restores session if it exists
+      child_window:perform_action(wezterm.action { EmitEvent = 'auto_restore_session' }, child_pane)
     end),
   }
 end

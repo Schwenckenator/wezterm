@@ -38,6 +38,9 @@ return {
 
     -- Workspace
     { key = 'M', mods = 'SHIFT|CTRL', action = act.ShowLauncherArgs { flags = 'WORKSPACES' } },
+    { key = 's', mods = 'SHIFT|CTRL', action = wezterm.action { EmitEvent = 'save_session' } },
+    -- { key = 'L', mods = 'LEADER', action = wezterm.action { EmitEvent = 'load_session' } },
+    { key = 'r', mods = 'LEADER', action = wezterm.action { EmitEvent = 'restore_session' } },
     -- {
     --   key = 'N',
     --   mods = 'SHIFT|CTRL',
