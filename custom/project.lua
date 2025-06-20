@@ -1,16 +1,24 @@
 local wezterm = require 'wezterm'
-local act = wezterm.action
+local util = require 'utils'
 
 M = {}
 
+local project_list = {
+  wezterm.home_dir,
+  wezterm.home_dir .. '/.config/nvim',
+  wezterm.home_dir .. '/.config/wezterm',
+}
+
 local project_dirs = {
   wezterm.home_dir .. '/projects',
+  wezterm.home_dir .. '/projects/godot',
+  wezterm.home_dir .. '/projects/nvim-plugins',
   wezterm.home_dir .. '/Documents/Godot',
   wezterm.home_dir .. '/Documents/GitHub',
 }
 
 local function get_git_dirs()
-  local projects = { wezterm.home_dir }
+  local projects = util.shallow_copy(project_list)
   for _, project_dir in ipairs(project_dirs) do
     for _, dir in ipairs(wezterm.glob(project_dir .. '/*')) do
       -- ... and add them to the projects table.

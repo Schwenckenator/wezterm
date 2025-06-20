@@ -46,7 +46,7 @@ local keymaps = require 'keys'
 
 local project = require 'custom.project'
 
-table.insert(keymaps.keys, { key = 'n', mods = 'ALT', action = project.choose_project() })
+table.insert(keymaps.keys, { key = 'n', mods = 'SHIFT|CTRL', action = project.choose_project() })
 
 return {
   font = wezterm.font_with_fallback {

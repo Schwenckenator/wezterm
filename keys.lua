@@ -38,28 +38,28 @@ return {
 
     -- Workspace
     { key = 'M', mods = 'SHIFT|CTRL', action = act.ShowLauncherArgs { flags = 'WORKSPACES' } },
-    {
-      key = 'N',
-      mods = 'SHIFT|CTRL',
-      action = act.PromptInputLine {
-        description = 'Enter name for new Workspace',
-        action = wezterm.action_callback(function(window, pane, line)
-          -- Bail if <ESC> is hit
-          -- If empty, will generate random name
-          if line ~= nil then
-            window:perform_action(
-              act.SwitchToWorkspace {
-                name = line,
-                spawn = {
-                  cwd = '~',
-                },
-              },
-              pane
-            )
-          end
-        end),
-      },
-    },
+    -- {
+    --   key = 'N',
+    --   mods = 'SHIFT|CTRL',
+    --   action = act.PromptInputLine {
+    --     description = 'Enter name for new Workspace',
+    --     action = wezterm.action_callback(function(window, pane, line)
+    --       -- Bail if <ESC> is hit
+    --       -- If empty, will generate random name
+    --       if line ~= nil then
+    --         window:perform_action(
+    --           act.SwitchToWorkspace {
+    --             name = line,
+    --             spawn = {
+    --               cwd = '~',
+    --             },
+    --           },
+    --           pane
+    --         )
+    --       end
+    --     end),
+    --   },
+    -- },
 
     -- Debug menu
     { key = 'l', mods = 'SHIFT|CTRL|ALT', action = act.ShowDebugOverlay },
