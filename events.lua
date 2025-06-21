@@ -1,5 +1,6 @@
 local wezterm = require 'wezterm'
 local session_manager = require 'custom.session'
+local notify = require 'custom.notify'
 
 -- This function returns the suggested title for a tab.
 -- It prefers the title that was set via `tab:set_title()`
@@ -33,7 +34,7 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
 end)
 
 wezterm.on('gui-startup', function(cmd)
-  local _tab, _pane, window = wezterm.mux.spawn_window(cmd or {})
+  local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
   window:gui_window():maximize()
 end)
 
@@ -45,6 +46,16 @@ wezterm.on('update-status', function(window, pane)
     return
   end
   window:set_left_status(' ' .. active_workspace .. ': ')
+
+  if #notify.notification > 0 then
+    window:set_right_status(active_workspace .. ': ' .. notify.notification .. ' ')
+  else
+    window:set_right_status ''
+  end
+end)
+
+wezterm.on('window-config-reloaded', function(window, pane)
+  notify.notify('config was reloaded!', 1000)
 end)
 
 -- *************

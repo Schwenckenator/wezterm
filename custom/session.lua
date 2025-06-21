@@ -6,6 +6,7 @@
 -- ]]
 
 local wezterm = require 'wezterm' -- [[@as Wezterm]]
+local notify = require 'custom.notify'
 local os = wezterm.target_triple
 local M = {}
 
@@ -16,6 +17,7 @@ end
 local function display_notification(window, message)
   wezterm.log_info(message)
 
+  notify.notify(message, 4000)
   -- Gui can be added here?
   -- window:toast_notification('Session Saver', message, nil, 4000)
 end
@@ -223,7 +225,6 @@ function M.restore_state(window)
   -- Only restore state if there is
   -- *1* tab with *1* pane
   if #tabs ~= 1 or #tabs[1]:panes() ~= 1 then
-    wezterm.log_info 'Shortcut!'
     wezterm.log_info 'Restoration can only be performed in a window with a single tab and a single pane, to prevent accidental data loss'
     return
   end
@@ -232,7 +233,6 @@ function M.restore_state(window)
   local foreground_process = initial_pane:get_foreground_process_name()
 
   if not foreground_process:find 'sh' then
-    wezterm.log_info 'Shortcut!'
     wezterm.log_info 'Active program detected. Restoration can only be performed on a bare shell'
     return
   end

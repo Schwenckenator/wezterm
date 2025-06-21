@@ -1,5 +1,7 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
+local notify = require 'custom.notify'
+local kill_workspace = require 'custom.kill-workspace'
 
 return {
   -- leader = { key = 'Space', mods = 'ALT', timeout = 1000 },
@@ -41,6 +43,40 @@ return {
     { key = 's', mods = 'SHIFT|CTRL', action = wezterm.action { EmitEvent = 'save_session' } },
     -- { key = 'L', mods = 'LEADER', action = wezterm.action { EmitEvent = 'load_session' } },
     { key = 'r', mods = 'LEADER', action = wezterm.action { EmitEvent = 'restore_session' } },
+    {
+      key = 'k',
+      mods = 'LEADER',
+      action = wezterm.action.InputSelector {
+        title = 'Closing workspace',
+        description = ' 🛑 Really close workspace? 🛑',
+        choices = {
+          {
+            label = wezterm.format {
+              { Foreground = { AnsiColor = 'Red' } },
+              { Text = 'NO' },
+            },
+            id = 'no',
+          },
+          {
+            label = wezterm.format {
+              { Foreground = { AnsiColor = 'Green' } },
+              { Text = 'yes' },
+            },
+            id = 'yes',
+          },
+        },
+        alphabet = 'ny',
+        action = wezterm.action_callback(function(window, pane, id, label)
+          if id ~= 'yes' then
+            notify.notify('Close workspace cancelled!', 2000)
+            return
+          end
+          local ws = window:active_workspace()
+          kill_workspace.kill(ws)
+          notify.notify('Closed workspace!', 2000)
+        end),
+      },
+    },
     -- {
     --   key = 'N',
     --   mods = 'SHIFT|CTRL',
