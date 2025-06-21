@@ -33,7 +33,7 @@ function M.select_project()
   return wezterm.action_callback(function(window, pane)
     local projects = {}
     for _, value in ipairs(get_git_dirs()) do
-      table.insert(projects, { label = value })
+      table.insert(projects, { id = value, label = value:gsub(wezterm.home_dir, '~') })
     end
 
     window:perform_action(
