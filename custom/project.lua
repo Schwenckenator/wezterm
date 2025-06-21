@@ -29,44 +29,45 @@ local function get_git_dirs()
   return projects
 end
 
-M.choose_project = function()
-  local function get_choices()
-    local choices = {}
+function M.select_project()
+  return wezterm.action_callback(function(window, pane)
+    local projects = {}
     for _, value in ipairs(get_git_dirs()) do
-      table.insert(choices, { label = value })
+      table.insert(projects, { label = value })
     end
 
-    return choices
-  end
+    window:perform_action(
+      wezterm.action.InputSelector {
+        title = 'Choose Project',
+        fuzzy = true,
+        choices = projects,
+        action = wezterm.action_callback(function(child_window, child_pane, id, label)
+          -- "label" may be empty if nothing was selected. Don't bother doing anything
+          -- when that happens.
+          if not label then
+            return
+          end
 
-  return wezterm.action.InputSelector {
-    title = 'Projects',
-    choices = get_choices(),
-    fuzzy = true,
-    action = wezterm.action_callback(function(child_window, child_pane, id, label)
-      -- "label" may be empty if nothing was selected. Don't bother doing anything
-      -- when that happens.
-      if not label then
-        return
-      end
-
-      -- The SwitchToWorkspace action will switch us to a workspace if it already exists,
-      -- otherwise it will create it for us.
-      child_window:perform_action(
-        wezterm.action.SwitchToWorkspace {
-          -- We'll give our new workspace a nice name, like the last path segment
-          -- of the directory we're opening up.
-          name = label:match '([^/]+)$',
-          -- Here's the meat. We'll spawn a new terminal with the current working
-          -- directory set to the directory that was picked.
-          spawn = { cwd = label },
-        },
-        child_pane
-      )
-      -- Restores session if it exists
-      child_window:perform_action(wezterm.action { EmitEvent = 'auto_restore_session' }, child_pane)
-    end),
-  }
+          -- The SwitchToWorkspace action will switch us to a workspace if it already exists,
+          -- otherwise it will create it for us.
+          child_window:perform_action(
+            wezterm.action.SwitchToWorkspace {
+              -- We'll give our new workspace a nice name, like the last path segment
+              -- of the directory we're opening up.
+              name = label:match '([^/]+)$',
+              -- Here's the meat. We'll spawn a new terminal with the current working
+              -- directory set to the directory that was picked.
+              spawn = { cwd = label },
+            },
+            child_pane
+          )
+          -- Restores session if it exists
+          child_window:perform_action(wezterm.action { EmitEvent = 'auto_restore_session' }, child_pane)
+        end),
+      },
+      pane
+    )
+  end)
 end
 
 return M

@@ -1,4 +1,5 @@
 local wezterm = require 'wezterm'
+local session_manager = require 'custom.session'
 
 -- This function returns the suggested title for a tab.
 -- It prefers the title that was set via `tab:set_title()`
@@ -29,4 +30,36 @@ wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_wid
   return {
     { Text = ' ' .. title .. ' ' },
   }
+end)
+
+wezterm.on('gui-startup', function(cmd)
+  local _tab, _pane, window = wezterm.mux.spawn_window(cmd or {})
+  window:gui_window():maximize()
+end)
+
+wezterm.on('update-status', function(window, pane)
+  local active_workspace = window:active_workspace()
+  if active_workspace == 'default' then
+    -- Don't show if default
+    window:set_left_status ''
+    return
+  end
+  window:set_left_status(' ' .. active_workspace .. ': ')
+end)
+
+-- *************
+-- Custom events
+-- *************
+
+wezterm.on('save_session', function(window)
+  session_manager.save_state(window)
+end)
+-- wezterm.on('load_session', function(window)
+--   session_manager.load_state(window)
+-- end)
+wezterm.on('restore_session', function(window)
+  session_manager.restore_state(window)
+end)
+wezterm.on('auto_restore_session', function(window)
+  session_manager.restore_state(window)
 end)

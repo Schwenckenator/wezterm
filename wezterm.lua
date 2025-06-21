@@ -2,14 +2,13 @@ local wezterm = require 'wezterm'
 
 local keymaps = require 'keys'
 
+-- Call event handlers
+require 'events'
+
 local project = require 'custom.project'
 
 -- This is here because calling *glob in a 'require'd file causes bugs for some reason
-table.insert(keymaps.keys, { key = 'n', mods = 'SHIFT|CTRL', action = project.choose_project() })
-
-require 'event.format-tab-title'
-require 'event.update-status'
-require 'event.session'
+table.insert(keymaps.keys, { key = 'n', mods = 'SHIFT|CTRL', action = project.select_project() })
 
 return {
   font = wezterm.font_with_fallback {
