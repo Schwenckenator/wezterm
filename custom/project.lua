@@ -44,7 +44,7 @@ function M.select_project()
         action = wezterm.action_callback(function(child_window, child_pane, id, label)
           -- "label" may be empty if nothing was selected. Don't bother doing anything
           -- when that happens.
-          if not label then
+          if not id then
             return
           end
 
@@ -54,10 +54,10 @@ function M.select_project()
             wezterm.action.SwitchToWorkspace {
               -- We'll give our new workspace a nice name, like the last path segment
               -- of the directory we're opening up.
-              name = label:match '([^/]+)$',
+              name = id:match '([^/]+)$',
               -- Here's the meat. We'll spawn a new terminal with the current working
               -- directory set to the directory that was picked.
-              spawn = { cwd = label },
+              spawn = { cwd = id },
             },
             child_pane
           )
